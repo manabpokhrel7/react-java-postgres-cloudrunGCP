@@ -4,7 +4,7 @@ resource "google_compute_url_map" "main" {
   default_service = google_compute_backend_service.react_backend.id
 
   host_rule {
-    hosts        = ["*"]
+    hosts        = ["cloud.bildstrata.com"]
     path_matcher = "allpaths"
   }
 
@@ -39,6 +39,7 @@ resource "google_compute_global_forwarding_rule" "https" {
   name       = "cloudrun-https-forwarding-rule"
   port_range = "443"
   target     = google_compute_target_https_proxy.https.id
+  ip_address = google_compute_global_address.lb_ip.address
 }
 
 resource "google_compute_url_map" "http_redirect" {
@@ -59,4 +60,5 @@ resource "google_compute_global_forwarding_rule" "http" {
   name       = "http-redirect-rule"
   port_range = "80"
   target     = google_compute_target_http_proxy.http_redirect.id
+  ip_address = google_compute_global_address.lb_ip.address
 }
