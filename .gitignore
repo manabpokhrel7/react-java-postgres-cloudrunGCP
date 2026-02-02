@@ -1,6 +1,9 @@
+# Terraform
+Terraform/.terraform/
 Terraform/.terraform.lock.hcl
-Terraform/.terraform
 Terraform/terraform.tfstate
 Terraform/terraform.tfstate.backup
+
+# Credentials
 Terraform/key.json
 .git
