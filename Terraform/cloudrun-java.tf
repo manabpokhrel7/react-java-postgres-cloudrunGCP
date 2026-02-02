@@ -82,6 +82,12 @@ resource "google_cloud_run_v2_service" "java" {
       }
     }
   }
+  lifecycle {
+    ignore_changes = [
+      client,
+      client_version,
+    ]
+  }
 }
 
 resource "google_cloud_run_v2_service" "react" {
