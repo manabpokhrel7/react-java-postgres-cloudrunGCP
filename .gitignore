@@ -3,3 +3,4 @@ Terraform/.terraform
 Terraform/terraform.tfstate
 Terraform/terraform.tfstate.backup
 Terraform/key.json
+.git

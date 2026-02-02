@@ -68,7 +68,7 @@ resource "google_cloud_run_v2_service" "java" {
 
       env {
         name  = "RABBITMQ_PORT"
-        value = "5671"   # TLS port
+        value = "5672"   # TLS port
       }
 
       env {
