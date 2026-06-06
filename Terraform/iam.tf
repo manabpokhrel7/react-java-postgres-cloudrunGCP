@@ -10,3 +10,9 @@ resource "google_cloud_run_v2_service_iam_member" "react_invoker" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
+resource "google_cloud_run_v2_service_iam_member" "docs_invoker" {
+  name     = google_cloud_run_v2_service.onlyoffice.name
+  location = google_cloud_run_v2_service.onlyoffice.location
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}

@@ -4,6 +4,7 @@ resource "google_cloud_run_v2_service" "java" {
   ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
   deletion_protection = false
 
+
   template {
 
     volumes {
@@ -16,12 +17,13 @@ resource "google_cloud_run_v2_service" "java" {
     }
 
     scaling {
+      min_instance_count = 0
       max_instance_count = 10
     }
 
     containers {
       name  = "java-container"
-      image = "us-central1-docker.pkg.dev/thermal-camera-485502-u2/my-repository/java-springboot:v9"
+      image = "us-central1-docker.pkg.dev/project-5cccd6a0-b034-4117-a60/my-repository/java-springboot:v9"
 
       ports {
         container_port = 9090
@@ -62,23 +64,8 @@ resource "google_cloud_run_v2_service" "java" {
 
       # ===== RABBITMQ (CloudAMQP – managed) =====
       env {
-        name  = "RABBITMQ_HOST"
-        value = "woodpecker.rmq.cloudamqp.com"
-      }
-
-      env {
-        name  = "RABBITMQ_PORT"
-        value = "5672"   # TLS port
-      }
-
-      env {
-        name  = "RABBITMQ_USER"
-        value = "amluser"
-      }
-
-      env {
-        name  = "RABBITMQ_PASSWORD"
-        value = "amlpassword"
+        name  = "RABBITMQ_URL"
+        value = "amqps://mkswvofb:zbp2DoZm6cbWPim7rLfU9rqP0Bcom9Eo@shark.rmq.cloudamqp.com/mkswvofb"
       }
     }
   }
@@ -94,17 +81,75 @@ resource "google_cloud_run_v2_service" "react" {
   name     = "react-frontend"
   location = "us-central1"
   ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+  deletion_protection = false
 
   template {
+    scaling {
+      min_instance_count = 0
+      max_instance_count = 10
+    }
+
     containers {
       name  = "react-container"
-      image = "us-central1-docker.pkg.dev/thermal-camera-485502-u2/my-repository/react-springboot:latest"
+      image = "us-central1-docker.pkg.dev/project-5cccd6a0-b034-4117-a60/my-repository/react-springboot:latest"
 
       ports {
         container_port = 80
       }
     }
   }
+  lifecycle {
+    ignore_changes = [
+      client,
+      client_version,
+    ]
+  }
+}
+resource "google_cloud_run_v2_service" "onlyoffice" {
+  name     = "onlyoffice-documentserver"
+  location = "us-central1"
+  ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+  deletion_protection = false
+
+  template {
+
+    scaling {
+      min_instance_count = 0
+      max_instance_count = 10
+    }
+
+    containers {
+      name  = "onlyoffice-container"
+      image = "onlyoffice/documentserver:latest"
+
+      ports {
+        container_port = 80
+      }
+
+      env {
+        name  = "JWT_ENABLED"
+        value = "false"
+      }
+
+      env {
+        name  = "ALLOW_PRIVATE_IP_ADDRESS"
+        value = "true"
+      }
+
+      env {
+        name  = "ALLOW_META_IP_ADDRESS"
+        value = "true"
+      }
+
+      resources {
+        limits = {
+          memory = "2Gi"
+          cpu    = "2"
+        }
+      }
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       client,

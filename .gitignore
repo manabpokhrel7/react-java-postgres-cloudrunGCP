@@ -6,4 +6,5 @@ Terraform/terraform.tfstate.backup
 
 # Credentials
 Terraform/key.json
+Terraform/terraform-sa-key.json
 .git

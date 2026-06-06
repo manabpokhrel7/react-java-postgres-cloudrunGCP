@@ -7,6 +7,10 @@ resource "google_compute_url_map" "main" {
     hosts        = ["cloud.bildstrata.com"]
     path_matcher = "allpaths"
   }
+  host_rule {
+    hosts        = ["office.bildstrata.com"]
+    path_matcher = "office"
+}
 
   path_matcher {
     name            = "allpaths"
@@ -17,13 +21,20 @@ resource "google_compute_url_map" "main" {
       service = google_compute_backend_service.java_backend.id
     }
   }
+  path_matcher {
+    name            = "office"
+    default_service = google_compute_backend_service.docs_backend.id
+  }
 }
 
 resource "google_compute_managed_ssl_certificate" "app_cert" {
   name = "app-managed-cert"
 
   managed {
-    domains = ["cloud.bildstrata.com"]
+    domains = [
+      "cloud.bildstrata.com",
+      "office.bildstrata.com"
+    ]
   }
 }
 

@@ -17,3 +17,13 @@ resource "google_compute_region_network_endpoint_group" "java_neg" {
     service = google_cloud_run_v2_service.java.name
   }
 }
+
+resource "google_compute_region_network_endpoint_group" "docs_neg" {
+  name                  = "docs-neg"
+  region                = "us-central1"
+  network_endpoint_type = "SERVERLESS"
+
+  cloud_run {
+    service = google_cloud_run_v2_service.onlyoffice.name
+  }
+}

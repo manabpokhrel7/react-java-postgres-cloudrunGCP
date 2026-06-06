@@ -16,3 +16,13 @@ resource "google_compute_backend_service" "java_backend" {
     group = google_compute_region_network_endpoint_group.java_neg.id
   }
 }
+
+resource "google_compute_backend_service" "docs_backend" {
+  name                  = "docs-backend"
+  protocol              = "HTTP"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+
+  backend {
+    group = google_compute_region_network_endpoint_group.docs_neg.id
+  }
+}
